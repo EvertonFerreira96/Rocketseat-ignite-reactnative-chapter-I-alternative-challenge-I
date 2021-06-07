@@ -11,18 +11,25 @@ interface Task {
 }
 
 export function Home() {
-  // const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   function handleAddTask(newTaskTitle: string) {
-    //TODO - add new task if it's not empty
+    if(newTaskTitle == "")
+      return; 
+    setTasks(previous => [...previous,  {
+      id: new Date().getTime(),
+      done: false, 
+      title: newTaskTitle
+    }])
+
   }
 
   function handleMarkTaskAsDone(id: number) {
-    //TODO - mark task as done if exists
+    setTasks( previous => previous.map(t => t.id === id ? Object.assign(t, t.done = !t.done) : t));
   }
 
   function handleRemoveTask(id: number) {
-    //TODO - remove task from state
+    setTasks(previous => previous.filter(t => t.id !== id )); 
   }
 
   return (
