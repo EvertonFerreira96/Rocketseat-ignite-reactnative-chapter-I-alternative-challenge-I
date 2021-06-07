@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
+import { View } from 'react-native';
 
 import { Header } from '../components/Header';
 import { MyTasksList } from '../components/MyTasksList';
 import { TodoInput } from '../components/TodoInput';
+import { themes } from '../theme';
 
 interface Task {
   id: number;
   title: string;
   done: boolean;
 }
-
+type themeProps = "light" | "dark"
 export function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [theme, setTheme] = useState<themeProps>("light")
 
+
+function handleTheme() {
+  setTheme(previous => previous == "light" ? "dark" : "light")
+}
   function handleAddTask(newTaskTitle: string) {
     if(newTaskTitle == "")
       return; 
@@ -34,15 +41,19 @@ export function Home() {
 
   return (
     <>
-      <Header />
+    <View style={{backgroundColor: themes[theme].backgrounds.primary, flex:1}}>
 
-      <TodoInput addTask={handleAddTask} />
+      <Header themeName={theme} onPress={() => handleTheme()}/>
+
+      <TodoInput addTask={handleAddTask} themeName={theme} />
 
       <MyTasksList 
         tasks={tasks} 
+        themeName={theme}
         onPress={handleMarkTaskAsDone} 
         onLongPress={handleRemoveTask} 
-      />
+        />
+    </View>
     </>
   )
 }
